@@ -1,0 +1,95 @@
+# depslib dependency file v1.0
+1577181336 source:c:\users\alexr\documents\projet1\tronproject\main.c
+	<raylib.h>
+	<stdio.h>
+
+1577182087 c:\users\alexr\documents\projet1\tronproject\include\raylib.h
+	<stdarg.h>
+	<stdbool.h>
+
+1577488059 source:c:\users\alexr\documents\projet1\tronproject\src\main.c
+	"raylib.h"
+	"stb_perlin.h"
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<errno.h>
+
+1556185226 source:c:\users\alexr\documents\projet1\tronproject\src\simple_game.c
+	"raylib.h"
+
+1577383979 c:\users\alexr\documents\projet1\tronproject\include\stb_perlin.h
+	<math.h>
+
+1578296919 source:c:\users\alexr\documents\projet1\planarwar\src\main.c
+	"raylib.h"
+	"Parameters.h"
+	"Snakes.h"
+	"Fruits.h"
+	"Colors.h"
+	"background.h"
+	<dos.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<errno.h>
+	<time.h>
+
+1577182087 c:\users\alexr\documents\projet1\planarwar\include\raylib.h
+	<stdarg.h>
+	<stdbool.h>
+
+1577646328 c:\users\alexr\documents\projet1\planarwar\include\stb_perlin.h
+	<math.h>
+
+1577789115 source:c:\users\alexr\documents\projet1\planarwar\src\colors.c
+	"Colors.h"
+	"Parameters.h"
+	"raylib.h"
+	"stb_perlin.h"
+
+1577707276 c:\users\alexr\documents\projet1\planarwar\src\colors.h
+	"raylib.h"
+	"Snakes.h"
+
+1578294388 c:\users\alexr\documents\projet1\planarwar\src\snakes.h
+	"raylib.h"
+	"Parameters.h"
+
+1578257153 c:\users\alexr\documents\projet1\planarwar\src\parameters.h
+	"raylib.h"
+
+1578294387 source:c:\users\alexr\documents\projet1\planarwar\src\snakes.c
+	"Snakes.h"
+	"Parameters.h"
+	"Colors.h"
+	"raylib.h"
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	<time.h>
+
+1578255531 source:c:\users\alexr\documents\projet1\planarwar\src\fruits.c
+	"Fruits.h"
+	"Parameters.h"
+	"Colors.h"
+	"raylib.h"
+
+1578245974 c:\users\alexr\documents\projet1\planarwar\src\fruits.h
+	"raylib.h"
+	"Parameters.h"
+	"Snakes.h"
+	<stdlib.h>
+
+1578256180 source:c:\users\alexr\documents\projet1\planarwar\src\background.c
+	"background.h"
+	"Colors.h"
+	"raylib.h"
+	"Fruits.h"
+	<stdlib.h>
+	<stdio.h>
+
+1578177409 c:\users\alexr\documents\projet1\planarwar\src\background.h
+	"raylib.h"
+	"Colors.h"
+
