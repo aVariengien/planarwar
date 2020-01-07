@@ -27,6 +27,6 @@ typedef struct Fruits Fruits;
 bool IsCircleOnScreen(Vector2 pos, float rad, int h, int w);
 int UpdateEatenFruits(Game* game, Fruits* fruits);
 Fruit NewFruit(int h, int w);
-int UpdateFruit(Game* game, Fruits* fruits, int h, int w);
+int UpdateFruits(Game* game, Fruits* fruits, int h, int w);
 void DrawFruits(Fruits * fruits);
 #endif // FRUITS_H_INCLUDED

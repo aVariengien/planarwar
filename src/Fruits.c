@@ -68,7 +68,7 @@ bool IsCircleOnScreen(Vector2 pos, float rad, int h, int w)
     return ((pos.x + rad) > 0);
 }
 
-int UpdateFruit(Game* game, Fruits* fruits, int h, int w)
+int UpdateFruits(Game* game, Fruits* fruits, int h, int w)
 {
     if ((rand()%FRUIT_APPARITION_SPEED == 0) && (fruits->FruitCount < MAX_FRUITS))
     {
@@ -84,7 +84,7 @@ int UpdateFruit(Game* game, Fruits* fruits, int h, int w)
             fruits->Fruits[i].Radius += FRUIS_GROWTH_SPEED;
         }
     }
-    ///MODE TEST COURSE
+    ///MODE COURSE
     if (game->GameMode == COURSE)
     {
         for (int i=0; i<fruits->FruitCount; i++)

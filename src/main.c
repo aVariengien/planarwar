@@ -2,10 +2,9 @@
 /*******************************************************************************************
 *
 *
-*
 *   PlanarWar
 *   Fight for your life against other genetically modified planarian worms in a Petri box !
-*   You can cut a worm in pieces by crashing on it but be careful : the pieces became new living worms !
+*   You can cut a worm in pieces by crashing on it but be careful : the pieces become new living worms !
 *
 *   This game has been created by Alexandre Variengien using raylib (www.raylib.com)
 *   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
@@ -79,7 +78,7 @@ int GetKeyboardKeyDown()
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
 //----------------------------------------------------------------------------------
-typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING, RULES, GAME_PARAM } GameScreen;
+typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING, RULES, GAME_PARAM,TUTORIAL } GameScreen;
 
 ///nb de joueurs -> keys -> game
 
@@ -115,8 +114,6 @@ int main(void)
 
     GameScreen currentScreen = LOGO;
     printf("ok");
-
-
     // TODO: Initialize all required variables and load all required data here!
 
     srand(time(NULL));
@@ -135,16 +132,51 @@ int main(void)
     Fruits fruits;
     fruits.FruitCount = 0;
 
+
+
     Background b;
     InitBackgroung(&b,screenWidth,screenHeight);
 
+    //tutorial variables
+
+    Fruits tutoFruits;
+
+
+    Game tuto;
+    Player playerTuto;
+    tuto.PlayerCount = 3; //the player and a dummy snake to test attacks
+    tuto.GameMode = NORMAL;
+    InitPlayer(&playerTuto,0,screenWidth,screenHeight,true,NORMAL);
+    playerTuto.KeyLeft = KEY_LEFT;
+    playerTuto.KeyRight = KEY_RIGHT;
+    playerTuto.KeyDash = KEY_UP;
+    tuto.Players[0] = playerTuto;
+
+    InitPlayer(&playerTuto,1,screenWidth,screenHeight,true,NORMAL); //a dummy player
+    playerTuto.KeyLeft = KEY_ONE; //random key not to be used
+    playerTuto.KeyRight = KEY_ONE;
+    playerTuto.KeyDash = KEY_ONE;
+    playerTuto.ControledSnake[0].Dummy = true;
+    tuto.Players[1] = playerTuto;
+
+
+    InitPlayer(&playerTuto,2,screenWidth,screenHeight,true,NORMAL); //a dead player
+    playerTuto.KeyLeft = KEY_ONE; //random key not to be used
+    playerTuto.KeyRight = KEY_ONE;
+    playerTuto.KeyDash = KEY_ONE;
+    tuto.Players[2] = playerTuto;
+
+
+    //Control variables
+    int tutoStep = 0;
     bool BeginGame = false;
     int StepGetParam = 0;
     int NumKey = 0;
     int NumPlayer = 0;
     int playerAlive = 0;
     bool EndGame = false;
-    // Main game lo   op
+
+    // Main game loop
 
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -172,7 +204,24 @@ int main(void)
                 {
                     currentScreen = GAME_PARAM;
                 }
+
+                if (IsKeyPressed(KEY_T))
+                {
+                    InitPlayer(&tuto.Players[0],0,b.Width,b.Height,false,tuto.GameMode); //initialiation of tutorial variables
+                    InitPlayer(&tuto.Players[1],1,b.Width,b.Height,false,tuto.GameMode);
+                    InitPlayer(&tuto.Players[2],2,b.Width,b.Height,false,tuto.GameMode);
+                    tuto.Players[1].ControledSnake[0].Dummy = true;
+                    currentScreen = TUTORIAL;
+                }
             } break;
+            case TUTORIAL:
+                {
+                    if (!UpdateTutorial(&tuto,&tutoFruits,&b))
+                    {
+                        currentScreen = LOGO;
+                    }
+                } break;
+
             case GAME_PARAM:
             {
                 if (StepGetParam == 0)
@@ -251,7 +300,7 @@ int main(void)
 
                 }
 
-                if (EndGame && (IsKeyPressed(KEY_DELETE) || IsKeyPressed(KEY_R) ))
+                if (EndGame && (IsKeyPressed(KEY_BACK) || IsKeyPressed(KEY_R) ))
                 {
                     currentScreen = LOGO;
                     delay(0,0,true);
@@ -282,7 +331,7 @@ int main(void)
                 case LOGO:
                 {
 
-                    DrawText("Welcome to Plannar War !", screenWidth/4,screenHeight/2, 90, LIGHTGRAY);
+                    DrawText("Welcome to Planar War !", screenWidth/4,screenHeight/2, 90, LIGHTGRAY);
                     DrawText("WAIT for 2 SECONDS...", 1000, 1000, 20, GRAY);
 
                 } break;
@@ -291,9 +340,9 @@ int main(void)
 
                     DrawRectangle(0, 0, screenWidth, screenHeight, GREEN);
                     DrawAllSnakes(&DemoScreen);
-                    DrawText("Welcome to Plannar War !", screenWidth/10,screenHeight/3, 110, LIGHTGRAY);
+                    DrawText("Welcome to Planar War !", screenWidth/10,screenHeight/3, 110, LIGHTGRAY);
                     DrawText("Press ENTER to begin the Game !", screenWidth/9, screenHeight/2, 80, WHITE);
-                    DrawText("Press <ESC> to quit, R to get the rules", screenWidth/9, screenHeight*5/6, 40, WHITE);
+                    DrawText("Press <ESC> to quit, T to begin the tutorial", screenWidth/9, screenHeight*5/6, 40, WHITE);
                     DrawFPS(0,0);
 
                 } break;
@@ -322,7 +371,7 @@ int main(void)
                         char InfoNumPlayer[60];
                         if (NumPlayer < game.PlayerCount)
                         {
-                            sprintf(InfoNumPlayer, "Player %d chose your control keys !", NumPlayer+1);
+                            sprintf(InfoNumPlayer, "Player %d choose your control keys !", NumPlayer+1);
                             DrawText(InfoNumPlayer, screenWidth/10,screenHeight/3, 80, BODY_COLORS[NumPlayer]);
                             switch (NumKey)
                             {
@@ -337,11 +386,16 @@ int main(void)
                         {
                             DrawText("Press ENTER to begin the PLANARWAR !", screenWidth/9,screenHeight/2, 70, WHITE);
                         }
-
-
                     }
 
                 } break;
+
+
+                case TUTORIAL:
+                    {
+                        DrawTutorial(&tuto,&tutoFruits,&b);
+                    }break;
+
                 case GAMEPLAY:
                 {
                     playerAlive = PlayersAlive(&game);
@@ -357,9 +411,8 @@ int main(void)
                         CollisionAllSnakes(&game);
                         CollisionAllSnakeScreen(&game,screenWidth,screenHeight);
                         UpdateSnakes(&game);
+                        UpdateFruits(&game,&fruits,screenHeight,screenWidth);
                         DrawAllSnakes(&game);
-
-                        UpdateFruit(&game,&fruits,screenHeight,screenWidth);
                         DrawFruits(&fruits);
                     }
                     else
@@ -389,9 +442,6 @@ int main(void)
                             DrawText(Winner, 3*screenWidth/14,screenHeight/2, 100, BODY_COLORS[playerAlive]);
                         }
                     }
-
-
-
 
                 } break;
 

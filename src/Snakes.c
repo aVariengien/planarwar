@@ -2,11 +2,13 @@
 #include "Snakes.h"
 #include "Parameters.h"
 #include "Colors.h"
+#include "Tutorial.h"
 #include "raylib.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
+
 
 void InitDemoScreen(Game* demoScreen , int w, int h)
 {
@@ -30,10 +32,7 @@ void UpdateDemoScreen(Game* demoScreen, int w, int h)
     UpdateSnakes(demoScreen);
     for (int i=0; i<MAX_SNAKE; i++)
     {
-        if (CollisionScreen(demoScreen->Players[0].ControledSnake[i].Position,w,h))
-        {
-            demoScreen->Players[0].ControledSnake[i].Direction = PI+demoScreen->Players[0].ControledSnake[i].Direction;
-        }
+        UpdateDummySnake(&demoScreen->Players[0].ControledSnake[i],w,h);
     }
 }
 
@@ -91,6 +90,7 @@ void InitSnake(Snake * snake, int num, int w, int h, Mode mode)
     snake->Speed = REGULAR_SPEED;
     snake->UpdatedFrameCount = 1;
     snake->Width = INITIAL_WIDTH;
+    snake->Dummy = false;
 }
 
 void InitPlayer(Player * player, int num, int w, int h, bool FirstTime, Mode mode)
@@ -190,6 +190,10 @@ int UpdatePlayer(Player* player, Mode mode) //Fonction qui met à jour les positi
             if (IsKeyPressed(player->KeyDash))
             {
                 snake->InDash = 1;
+
+            }
+            if (snake->InDash)
+            {
                 snake->Speed = DASH_SPEED;
                 snake->RotSpeed = DASH_ROT_SPEED;
             }
@@ -199,10 +203,9 @@ int UpdatePlayer(Player* player, Mode mode) //Fonction qui met à jour les positi
                 snake->InDash = 0;
                 snake->Speed = REGULAR_SPEED;
                 snake->RotSpeed = REGULAR_ROT_SPEED;
-
             }
 
-            if (snake->InDash)
+            if (snake->InDash && !snake->Dummy) //to show the effect of collision on a dshing snake, dummy snake are dashing without loss of length
             {
                 if (rand()%LENGTH_LOSS_SPEED == 0)
                 {
@@ -241,10 +244,8 @@ int DrawSnake(Snake* snake)
     {
         DrawCircleV(snake->Body[i].Position,snake->Body[i].Radius,snake->Body[i].PartColor);
     }
-    if (!snake->Dead)
-    {
-        DrawCircleV(snake->Position,snake->Width,snake->HeadColor);
-    }
+
+    DrawCircleV(snake->Position,snake->Width,snake->HeadColor);
 
     return 0;
 }
@@ -297,6 +298,7 @@ Snake CreateNewSnake(Snake snake)
     newSnake.Speed = snake.Speed;
     newSnake.UpdatedFrameCount = snake.UpdatedFrameCount;
     newSnake.Width = snake.Width;
+    newSnake.Dummy = snake.Dummy;
     return newSnake;
 
 }
@@ -417,9 +419,19 @@ int CollisionAllSnakes(Game* game)
                     Snake* snakeBody = &game->Players[j].ControledSnake[k];
 
                     col = CollisionSnakes(*snakeBody, *snakeHead);
+
+                    if (j==p && k==n && snakeHead->Dummy) //if the snake is dummy, it cannot eat itself, we undo any collision with itself. useful for dummy snakes
+                    {
+                        col = 0;
+                    }
+
+                    if (!(j==p && k==n) && !col) //if we are'nt considering the same snake, we check for head collision
+                    {
+                        col = col || CheckCollisionCircles(snakeHead->Position,snakeHead->Width,snakeBody->Position,snakeBody->Width);
+                    }
+
                     if (col ) //On teste s'il y a une collision pour toute paire de Snake, y compris des Snake avec eux mêmes
                     {
-
                         if ((snakeBody->FramesInHurt == 0) && (snakeHead->FramesInHurt == 0) && (!snakeHead->Dead) && !(snakeBody->Dead && snakeHead->InDash)) //snakeBody and snakeHead have invulnerability time if it's hurt
                             //If snakeHead is dashing in a dead body, nothing happen
                         {
@@ -461,9 +473,17 @@ int UpdateSnakes(Game* game)
 
 
 
-bool CollisionScreen(Vector2 Position,int w,int h)
+int CollisionScreen(Vector2 Position,int w,int h)
 {
-    return ((0 > Position.x) || (Position.x  > w) || (0 > Position.y) || (Position.y > h));
+    if ((0 > Position.x) ||(Position.x  > w))
+    {
+        return 1;
+    }
+    if ( (0 > Position.y) || (Position.y > h))
+    {
+        return 2;
+    }
+    return 0;
 }
 
 int CollisionAllSnakeScreen(Game * game, int w, int h)
