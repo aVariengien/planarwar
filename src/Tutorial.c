@@ -30,18 +30,18 @@ void UpdateDummySnake(Snake * dummy, int w, int h)
 
 bool UpdateTutorial(Game* tuto, Fruits *fruits, Background *b)
 {
-    if (IsKeyPressed(KEY_R))
+    if (IsKeyPressed(KEY_R)) //restart step
     {
         InitPlayer(&tuto->Players[0],0,b->Width,b->Height,false,tuto->GameMode);
         InitPlayer(&tuto->Players[1],1,b->Width,b->Height,false,tuto->GameMode);
         InitPlayer(&tuto->Players[2],2,b->Width,b->Height,false,tuto->GameMode);
         tuto->Players[1].ControledSnake[0].Dummy = true;
+        tuto->Players[0].ControledSnake[0].MaxLength = TUTORIAL_INITIAL_LENGTH;
     }
-    if (IsKeyPressed(KEY_A)) //azerty/qwerty keyboard ...
+    if (IsKeyPressed(KEY_A)) //quit but A=Q : azerty/qwerty keyboard ...
     {
         TutoStep = 0;
         return false;
-
     }
     if (IsKeyPressed(KEY_N))
     {
@@ -49,7 +49,20 @@ bool UpdateTutorial(Game* tuto, Fruits *fruits, Background *b)
         InitPlayer(&tuto->Players[0],0,b->Width,b->Height,false,tuto->GameMode);
         InitPlayer(&tuto->Players[1],1,b->Width,b->Height,false,tuto->GameMode);
         tuto->Players[1].ControledSnake[0].Dummy = true;
+        tuto->Players[0].ControledSnake[0].MaxLength = TUTORIAL_INITIAL_LENGTH;
     }
+    if (IsKeyPressed(KEY_P)) //Previous step
+    {
+        if (TutoStep >0)
+        {
+            TutoStep --;
+        }
+
+        InitPlayer(&tuto->Players[0],0,b->Width,b->Height,false,tuto->GameMode);
+        InitPlayer(&tuto->Players[1],1,b->Width,b->Height,false,tuto->GameMode);
+        tuto->Players[1].ControledSnake[0].Dummy = true;
+    }
+
     UpdateSnakes(tuto);
 
     for (int r=0; r<tuto->Players[1].SnakeNumber;r++)
@@ -132,5 +145,5 @@ void DrawTutorial(Game* tuto, Fruits *fruits, Background *b)
     }
     DrawText( TUTO_TEXT[TutoStep] , b->Width/4, 17*b->Height/30,25,BLACK);
     DrawText("Planar War Totorial !",b->Width/10,b->Height/10,40,GRAY);
-    DrawText("Press N to go to the next step of the Tutorial, R to restart this step and Q to quit the Tutorial",b->Width/10,b->Height/7,30,BLACK);
+    DrawText("Press N to go to the next step of the Tutorial,P for the previous,\nR to restart this step and Q to quit the Tutorial",b->Width/10,b->Height/7,30,BLACK);
 }

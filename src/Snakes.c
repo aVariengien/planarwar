@@ -17,9 +17,10 @@ void InitDemoScreen(Game* demoScreen , int w, int h)
     demo.KeyDash = 32;
     demo.KeyLeft = 32;
     demo.KeyRight = 32;
-    for (int i=1; i<MAX_SNAKE; i++)
+    for (int i=0; i<MAX_SNAKE; i++)
     {
         InitSnake(&(demo.ControledSnake[i]),rand()%4,w,h,demoScreen->GameMode );
+        demo.ControledSnake[i].FramesInHurt = 0; //we desactivate invulnerability at spawn to avoid flashing color
     }
     demo.SnakeNumber = MAX_SNAKE;
     demoScreen->PlayerCount = 1;

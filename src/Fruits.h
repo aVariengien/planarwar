@@ -1,12 +1,12 @@
 
+
+
+#ifndef FRUITS_H_INCLUDED
+#define FRUITS_H_INCLUDED
 #include "raylib.h"
 #include "Parameters.h"
 #include "Snakes.h"
 #include <stdlib.h>
-
-#ifndef FRUITS_H_INCLUDED
-#define FRUITS_H_INCLUDED
-
 
 struct Fruit
 {

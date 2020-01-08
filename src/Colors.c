@@ -1,8 +1,9 @@
 
 #include "Colors.h"
 #include "Parameters.h"
-#include "raylib.h"
 #include "stb_perlin.h"
+#include "raylib.h"
+
 
 
 
@@ -98,7 +99,7 @@ int UpdateColor(Snake * snake)
         DashColor(snake);
         return 0;
     }
-    if (snake->FramesInHurt>0)
+    if (snake->FramesInHurt%COLOR_FLASHING_SPEED > COLOR_FLASHING_SPEED/2 )
     {
         HurtColor(snake);
         return 0;

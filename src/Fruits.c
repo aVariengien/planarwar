@@ -70,7 +70,9 @@ bool IsCircleOnScreen(Vector2 pos, float rad, int h, int w)
 
 int UpdateFruits(Game* game, Fruits* fruits, int h, int w)
 {
-    if ((rand()%FRUIT_APPARITION_SPEED == 0) && (fruits->FruitCount < MAX_FRUITS))
+    if ((((rand()%FRUIT_APPARITION_SPEED == 0)&&(game->GameMode == NORMAL))|| //different appartion speed depending on the gamemode
+         ((rand()%COURSE_FRUIT_APPARITION_SPEED == 0)&&(game->GameMode == COURSE))) &&
+         (fruits->FruitCount < MAX_FRUITS))
     {
         fruits->FruitCount ++;
         fruits->Fruits[fruits->FruitCount-1] = NewFruit(h,w);

@@ -4,6 +4,8 @@
 #include "Snakes.h"
 #include "background.h"
 #include "Fruits.h"
+#include <math.h>
+
 void UpdateDummySnake(Snake * dummy, int w, int h);
 bool UpdateTutorial(Game* tuto, Fruits *fruits, Background *b);
 void DrawTutorial(Game* tuto, Fruits *fruits, Background *b);

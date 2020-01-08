@@ -1,13 +1,11 @@
 
-#include "raylib.h"
-#include "Snakes.h"
+
 
 #ifndef COLORS_H_INCLUDED
 #define COLORS_H_INCLUDED
 
-
-
-
+#include "raylib.h"
+#include "Snakes.h"
 
 
 int StayInBound(int x, int lower, int higher);

@@ -21,7 +21,8 @@
 #include "Fruits.h"
 #include "Colors.h"
 #include "background.h"
-#include <dos.h>
+#include "Tutorial.h"
+//#include <dos.h>
 
 #include <math.h>
 #include <stdio.h>
@@ -168,7 +169,6 @@ int main(void)
 
 
     //Control variables
-    int tutoStep = 0;
     bool BeginGame = false;
     int StepGetParam = 0;
     int NumKey = 0;
@@ -300,7 +300,7 @@ int main(void)
 
                 }
 
-                if (EndGame && (IsKeyPressed(KEY_BACK) || IsKeyPressed(KEY_R) ))
+                if (EndGame && (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressed(KEY_R) ))
                 {
                     currentScreen = LOGO;
                     delay(0,0,true);

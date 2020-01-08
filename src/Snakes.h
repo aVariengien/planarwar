@@ -1,65 +1,11 @@
-#include "raylib.h"
-#include "Parameters.h"
+
 
 #ifndef SNAKES_H_INCLUDED
 #define SNAKES_H_INCLUDED
 
+#include "raylib.h"
+#include "Parameters.h"
 
-struct BodyPart
-{
-    Vector2 Position;
-    float Radius;
-    Color PartColor;
-};
-
-typedef struct BodyPart BodyPart;
-
-
-struct Snake
-{
-    Vector2 Position;
-    BodyPart Body[MAX_LENGTH];
-    int Length;
-    int Dead;
-    int MaxLength;
-    float Direction;
-    float Speed;
-    float Width;
-    float RotSpeed;
-    int InDash;
-    int FramesInHurt;
-    Color BodyColor;
-    Color HeadColor;
-    int RandomSeed; //For randomized color
-    int UpdatedFrameCount;
-    int FrameCount;
-    bool Dummy; //useful for dummy snakes
-};
-
-typedef struct Snake Snake;
-
-struct Player //Un joueur peut controler plusieurs snakes
-{
-    Snake ControledSnake[MAX_SNAKE];
-    Color BodyColor;
-    Color HeadColor; //Tous les snakes controlés ont la même couleur : la couleur du joueur
-    int SnakeNumber;
-    int KeyRight;
-    int KeyLeft;
-    int KeyDash;
-    int Score;
-    bool ScoreUpdated;
-
-};
-
-typedef struct Player Player;
-
-struct Game
-{
-    Player Players[MAX_PLAYERS];
-    int PlayerCount;
-    Mode GameMode;
-};
 
 typedef struct Game Game;
 void DrawScores(Game* game, int h, int w);
