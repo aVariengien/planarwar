@@ -325,13 +325,13 @@ int CheckForCuts(Snake snake, Player* player, int snakeIndex) //If there is a hu
     for (int i=0; i<snake.Length; i++)
     {
 
-        if (InLeftOver && (snake.Body[i].Radius > 0) )
+        if (InLeftOver && (snake.Body[i].Radius > 0) ) //when we were in a dead zone and we see new alive parts : we create the dead snake of the dead part
         {
             InLeftOver = false;
             newSnake.Length = i - newSnakeBegining;
             newSnake.MaxLength = i - newSnakeBegining;
             newSnake.Dead = 1;
-            if (player->SnakeNumber < MAX_SNAKE)
+            if (player->SnakeNumber < MAX_SNAKE) //avoid overflow
             {
                 player->ControledSnake[player->SnakeNumber-1] = newSnake;
                 player->SnakeNumber ++;
@@ -339,10 +339,11 @@ int CheckForCuts(Snake snake, Player* player, int snakeIndex) //If there is a hu
 
             newSnakeBegining = i;
             newSnake = CreateNewSnake(snake);
+            newSnake.Width = snake.Body[i].Radius; //the width is the width of the body part
             newSnake.Position = snake.Body[i].Position;
         }
 
-        if (snake.Body[i].Radius <= 0 && (!InLeftOver))
+        if (snake.Body[i].Radius <= 0 && (!InLeftOver)) //when we enter a dead zone
         {
             InLeftOver = true;
             newSnake.Length = i - newSnakeBegining;

@@ -30,7 +30,7 @@ void UpdateDummySnake(Snake * dummy, int w, int h)
 
 bool UpdateTutorial(Game* tuto, Fruits *fruits, Background *b)
 {
-    if (IsKeyPressed(KEY_R)) //restart step
+    if (IsKeyPressed('r')) //restart step
     {
         InitPlayer(&tuto->Players[0],0,b->Width,b->Height,false,tuto->GameMode);
         InitPlayer(&tuto->Players[1],1,b->Width,b->Height,false,tuto->GameMode);
@@ -38,12 +38,12 @@ bool UpdateTutorial(Game* tuto, Fruits *fruits, Background *b)
         tuto->Players[1].ControledSnake[0].Dummy = true;
         tuto->Players[0].ControledSnake[0].MaxLength = TUTORIAL_INITIAL_LENGTH;
     }
-    if (IsKeyPressed(KEY_A)) //quit but A=Q : azerty/qwerty keyboard ...
+    if (IsKeyPressed('a')||IsKeyPressed('q')) //quit but A=Q : azerty/qwerty keyboard ... So I accept both to be sure
     {
         TutoStep = 0;
         return false;
     }
-    if (IsKeyPressed(KEY_N))
+    if (IsKeyPressed('n'))
     {
         TutoStep ++;
         InitPlayer(&tuto->Players[0],0,b->Width,b->Height,false,tuto->GameMode);

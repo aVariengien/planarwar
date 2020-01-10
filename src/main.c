@@ -242,7 +242,7 @@ int main(void)
                     StepGetParam = 2;
                     switch (GetKeyPressed())
                     {
-                    case 'c': game.GameMode = COURSE; InitPlayer(&CurrentPlayer,0, screenWidth, screenHeight, true, game.GameMode);  break; //We initialize the current player to be ready for the next step
+                    case 'r': game.GameMode = COURSE; InitPlayer(&CurrentPlayer,0, screenWidth, screenHeight, true, game.GameMode);  break; //We initialize the current player to be ready for the next step
                     case 'n': game.GameMode = NORMAL; InitPlayer(&CurrentPlayer,0, screenWidth, screenHeight, true, game.GameMode); break;
                     default: StepGetParam = 1; break;
                     }
@@ -283,6 +283,7 @@ int main(void)
 
                 if (BeginGame && IsKeyPressed(KEY_ENTER) )
                 {
+                    InitBackgroung(&b,screenWidth,screenHeight);
                     currentScreen = GAMEPLAY;
                 }
             } break;
@@ -386,7 +387,7 @@ int main(void)
                     if (StepGetParam == 1)
                     {
                         DrawText("Game Mode ?", screenWidth/10,screenHeight/3, 80, LIGHTGRAY);
-                        DrawText("Press N for NORMAL Mode, C for COURSE Mode", screenWidth/9, screenHeight/2, 60, WHITE);
+                        DrawText("Press N for NORMAL Mode, R for RACE Mode", screenWidth/9, screenHeight/2, 60, WHITE);
                     }
 
 

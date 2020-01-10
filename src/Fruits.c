@@ -32,9 +32,9 @@ int UpdateEatenFruits(Game* game, Fruits* fruits)
 
                     int length_gain = ((int) fruits->Fruits[f].Radius)*FRUITS_POWER;
 
-                    if (fruits->Fruits[f].SuperFruit) //Super fruits regen width and length
+                    if (fruits->Fruits[f].SuperFruit && snake->Width < INITIAL_WIDTH) //Super fruits regen width and length
                     {
-                        snake->Width = INITIAL_WIDTH;
+                        snake->Width += HURT_WIDTH_REDUCTION;
                     }
 
                     if (snake->MaxLength +length_gain < MAX_LENGTH)
