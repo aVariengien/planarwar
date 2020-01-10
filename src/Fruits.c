@@ -29,10 +29,14 @@ int UpdateEatenFruits(Game* game, Fruits* fruits)
                 {
 
                     fruits->Fruits[f].Eaten = 1;
-                    SwitchFruit(fruits, f, fruits->FruitCount-1); //we place the eaten fruit at the end of the array to delete it
-                    fruits->FruitCount --;
 
                     int length_gain = ((int) fruits->Fruits[f].Radius)*FRUITS_POWER;
+
+                    if (fruits->Fruits[f].SuperFruit) //Super fruits regen width and length
+                    {
+                        snake->Width = INITIAL_WIDTH;
+                    }
+
                     if (snake->MaxLength +length_gain < MAX_LENGTH)
                     {
                         snake->MaxLength += length_gain; //The size of the fruit is related to the length gain
@@ -41,6 +45,8 @@ int UpdateEatenFruits(Game* game, Fruits* fruits)
                     {
                         snake->MaxLength = MAX_LENGTH;
                     }
+                    SwitchFruit(fruits, f, fruits->FruitCount-1); //we place the eaten fruit at the end of the array to delete it
+                    fruits->FruitCount --;
 
 
                 }
@@ -59,7 +65,12 @@ Fruit NewFruit(int h, int w)
     Vector2 pos;
     pos.x = x;
     pos.y = y;
-    Fruit f = {pos, r, 0};
+    Fruit f = {pos, r, 0, false};
+
+    if (rand()%SUPER_FRUIT_FREQUENCY == 0)
+    {
+        f.SuperFruit = true;
+    }
     return f;
 }
 
@@ -110,8 +121,19 @@ void DrawFruits(Fruits * fruits)
     {
         if (!fruits->Fruits[i].Eaten)
         {
-            DrawCircleV(fruits->Fruits[i].Position,fruits->Fruits[i].Radius,FRUIT_OUT_COLOR);
-            DrawCircleV(fruits->Fruits[i].Position,fruits->Fruits[i].Radius*0.8,CloseRandomColor(FRUIT_COLOR, i, 0));
+            if (fruits->Fruits[i].SuperFruit)
+            {
+
+                DrawCircleV(fruits->Fruits[i].Position,fruits->Fruits[i].Radius,SUPER_FRUIT_OUT_COLOR);
+                DrawCircleV(fruits->Fruits[i].Position,fruits->Fruits[i].Radius*0.8,CloseRandomColor(SUPER_FRUIT_COLOR, i, 0));
+            }
+            else
+            {
+                DrawCircleV(fruits->Fruits[i].Position,fruits->Fruits[i].Radius,FRUIT_OUT_COLOR);
+                DrawCircleV(fruits->Fruits[i].Position,fruits->Fruits[i].Radius*0.8,CloseRandomColor(FRUIT_COLOR, i, 0));
+
+            }
+
 
         }
     }

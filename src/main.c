@@ -22,6 +22,7 @@
 #include "Colors.h"
 #include "background.h"
 #include "Tutorial.h"
+//#include <emscripten.h>
 //#include <dos.h>
 
 #include <math.h>
@@ -284,9 +285,36 @@ int main(void)
                 {
                     currentScreen = GAMEPLAY;
                 }
-            }
+            } break;
             case GAMEPLAY:
             {
+                playerAlive = PlayersAlive(&game);
+                if (game.GameMode == COURSE)
+                {
+                    UpdateBackground(&b, screenWidth,screenHeight);
+                }
+
+                if (playerAlive == -1)
+                {
+                    CollisionAllSnakes(&game);
+                    CollisionAllSnakeScreen(&game,screenWidth,screenHeight);
+                    UpdateSnakes(&game);
+                    UpdateFruits(&game,&fruits,screenHeight,screenWidth);
+                }
+                else
+                {
+                    EndGame = true;
+                    if (playerAlive != -2)
+                    {
+                        if (!game.Players[playerAlive].ScoreUpdated)
+                        {
+                            game.Players[playerAlive].Score ++;
+                            game.Players[playerAlive].ScoreUpdated = true;
+                        }
+                    }
+                }
+
+
                 if (EndGame && IsKeyPressed(KEY_ENTER))
                 {
                     currentScreen = GAMEPLAY;
@@ -398,20 +426,11 @@ int main(void)
 
                 case GAMEPLAY:
                 {
-                    playerAlive = PlayersAlive(&game);
-                    DrawBackground(&b);
 
-                    if (game.GameMode == COURSE)
-                    {
-                        UpdateBackground(&b, screenWidth,screenHeight);
-                    }
+                    DrawBackground(&b);
                     DrawFPS(0,0);
                     if (playerAlive == -1)
                     {
-                        CollisionAllSnakes(&game);
-                        CollisionAllSnakeScreen(&game,screenWidth,screenHeight);
-                        UpdateSnakes(&game);
-                        UpdateFruits(&game,&fruits,screenHeight,screenWidth);
                         DrawAllSnakes(&game);
                         DrawFruits(&fruits);
                     }
@@ -419,25 +438,17 @@ int main(void)
                     {
                         DrawAllSnakes(&game);
                         DrawFruits(&fruits);
-                        EndGame = true;
                         DrawText("Press ENTER to rematch !", 3*screenWidth/14, 6*screenHeight/10, 80, WHITE);
                         DrawText("Press R or <- to restart", 4*screenWidth/14, 7*screenHeight/10, 40, WHITE);
                         if (playerAlive == -2)
                         {
                             DrawScores(&game,screenHeight,screenWidth);
                             DrawText("END OF THE GAME : It's a DRAW !", 3*screenWidth/14,screenHeight/2, 100, LIGHTGRAY);
-
                         }
                         else
                         {
                             DrawScores(&game,screenHeight,screenWidth);
                             char Winner[60];
-                            if (!game.Players[playerAlive].ScoreUpdated)
-                            {
-                                game.Players[playerAlive].Score ++;
-                                game.Players[playerAlive].ScoreUpdated = true;
-                            }
-
                             sprintf(Winner, "Player %d win the Game !", playerAlive+1);
                             DrawText(Winner, 3*screenWidth/14,screenHeight/2, 100, BODY_COLORS[playerAlive]);
                         }

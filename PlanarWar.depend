@@ -21,7 +21,7 @@
 1577383979 c:\users\alexr\documents\projet1\tronproject\include\stb_perlin.h
 	<math.h>
 
-1578489333 source:c:\users\alexr\documents\projet1\planarwar\src\main.c
+1578667227 source:c:\users\alexr\documents\projet1\planarwar\src\main.c
 	"raylib.h"
 	"Parameters.h"
 	"Snakes.h"
@@ -56,10 +56,10 @@
 	"raylib.h"
 	"Parameters.h"
 
-1578489202 c:\users\alexr\documents\projet1\planarwar\src\parameters.h
+1578669375 c:\users\alexr\documents\projet1\planarwar\src\parameters.h
 	"raylib.h"
 
-1578490332 source:c:\users\alexr\documents\projet1\planarwar\src\snakes.c
+1578668707 source:c:\users\alexr\documents\projet1\planarwar\src\snakes.c
 	"Snakes.h"
 	"Parameters.h"
 	"Colors.h"
@@ -70,19 +70,19 @@
 	<math.h>
 	<time.h>
 
-1578485995 source:c:\users\alexr\documents\projet1\planarwar\src\fruits.c
+1578667970 source:c:\users\alexr\documents\projet1\planarwar\src\fruits.c
 	"Fruits.h"
 	"Parameters.h"
 	"Colors.h"
 	"raylib.h"
 
-1578488743 c:\users\alexr\documents\projet1\planarwar\src\fruits.h
+1578666639 c:\users\alexr\documents\projet1\planarwar\src\fruits.h
 	"raylib.h"
 	"Parameters.h"
 	"Snakes.h"
 	<stdlib.h>
 
-1578256180 source:c:\users\alexr\documents\projet1\planarwar\src\background.c
+1578669303 source:c:\users\alexr\documents\projet1\planarwar\src\background.c
 	"background.h"
 	"Colors.h"
 	"raylib.h"
@@ -90,7 +90,7 @@
 	<stdlib.h>
 	<stdio.h>
 
-1578177409 c:\users\alexr\documents\projet1\planarwar\src\background.h
+1578669163 c:\users\alexr\documents\projet1\planarwar\src\background.h
 	"raylib.h"
 	"Colors.h"
 
@@ -101,7 +101,7 @@
 	"background.h"
 	<math.h>
 
-1578490635 c:\users\alexr\documents\projet1\planarwar\src\tutorial.h
+1578668897 c:\users\alexr\documents\projet1\planarwar\src\tutorial.h
 	"Snakes.h"
 	"background.h"
 	"Fruits.h"

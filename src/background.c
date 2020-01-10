@@ -17,6 +17,7 @@ Spot NewSpot(int w, int h, int xoffset)
     s.Position.x = rand()%w + xoffset;
     s.Position.y= rand()%h;
     s.RandomSeed = rand();
+    s.Speed = SPOT_SPEED + ((float)(rand()%SPOT_SPEED_VARIATION))/100.;
     return s;
 }
 
@@ -25,7 +26,7 @@ void UpdateBackground(Background* b, int w, int h)
 {
     for (int i=0; i<MAX_SPOTS; i++)
     {
-        b->Spots[i].Position.x -= SPOT_SPEED;
+        b->Spots[i].Position.x -=   b->Spots[i].Speed;
         if (!(IsCircleOnScreen(b->Spots[i].Position,b->Spots[i].Radius[0],h,w)))
         {
             b->Spots[i] = NewSpot(2*w,h,w+b->Spots[i].Radius[0]);

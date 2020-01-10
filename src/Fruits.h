@@ -13,6 +13,7 @@ struct Fruit
     Vector2 Position;
     float Radius;
     int Eaten;
+    bool SuperFruit;
 };
 typedef struct Fruit Fruit;
 

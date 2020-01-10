@@ -9,6 +9,7 @@ struct Spot
     Vector2 Position;
     int Radius[CIRCLES_PER_SPOT];
     Color Colors[CIRCLES_PER_SPOT];
+    float Speed;
     int RandomSeed;
 };
 

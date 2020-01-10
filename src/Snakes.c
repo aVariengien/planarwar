@@ -365,7 +365,7 @@ int CheckForCuts(Snake snake, Player* player, int snakeIndex) //If there is a hu
 
         if (InLeftOver)
         {
-            newSnake.Body[i-newSnakeBegining].Radius += HURT_WIDTH_REDUCTION; //we reset the width of the snake before the hurt
+            newSnake.Body[i-newSnakeBegining].Radius = MINIMUM_LEFTOVER_RADIUS; //we reset the width of the snake before the hurt
         }
         //printf("i : %d LeftO : %d\n",i,InLeftOver );
     }
@@ -389,6 +389,11 @@ int SnakeHurt(Snake * snake, Player * player, int snakeIndex)
     {
         snake->Body[i].Radius -= HURT_WIDTH_REDUCTION;
     }
+    snake->Width -= HURT_WIDTH_REDUCTION;
+    if (snake->Width <=0)
+    {
+        snake->Width += HURT_WIDTH_REDUCTION;
+    }
     snake->FramesInHurt = INVULNERABILITY_TIME;
     CheckForCuts(*snake,player,snakeIndex);
     return 0;
@@ -398,7 +403,7 @@ int SnakeLocallyHurt(Snake * snake, Player * player,int snakeIndex, int place)
 {
     for (int i=StayInBound(place-IMPACT_WIDTH,0,snake->Length-1); i <= StayInBound(place+IMPACT_WIDTH,0,snake->Length-1); i++)
     {
-        snake->Body[i].Radius -= HURT_WIDTH_REDUCTION;
+        snake->Body[i].Radius -= IMPACT_WIDTH_REDUCTION;
     }
     snake->FramesInHurt = INVULNERABILITY_TIME;
     CheckForCuts(*snake,player,snakeIndex);
