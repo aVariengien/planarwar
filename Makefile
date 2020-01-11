@@ -3,8 +3,8 @@ EXEC=PlanarWar
 CC=gcc
 CCFLAGS=-Wall -g -fPIC
 
-LDFLAGS = -lm -lraylib
-LDDIR = -Llib -Iinclude
+LDFLAGS =-lraylib -lm 
+LDDIR =-Llib -Iinclude
 SRC_DIR=src
 OBJ_DIR=obj
 BIN_DIR=bin
