@@ -1,7 +1,7 @@
 
 #include "Colors.h"
 #include "Parameters.h"
-#include "stb_perlin.h"
+#include "stb_perlin.h" //a library to create perlin noise
 #include "raylib.h"
 
 
@@ -27,22 +27,21 @@ int CloseNumber(int x, int A,float f)
 }
 
 Color CloseRandomColor(Color col, int v, int seed)
+//get a random color with a nice smooth continuity along v and diversity thank to a random seed
+//useful for snakes' color
 {
     float f1 = stb_perlin_noise3_seed(0,0,v/50.0,0,0,0,seed);
     float f2 = stb_perlin_noise3_seed(0,v/50.0,0,0,0,0,seed);
     float f3 = stb_perlin_noise3_seed(v/50.0,0,0,0,0,0,seed);
 
     Color c = { CloseNumber(col.r,100,f1),CloseNumber(col.g,100,f2),CloseNumber(col.b,100,f3), col.a};
-    //printf("%i\n",c.r);
     return c;
 }
-
+//color update function to adapt to circumstances
 void DashColor(Snake* snake)
 {
-
     for (int i = 0; i<snake->Length; i++)
     {
-
         snake->Body[i].PartColor = CloseRandomColor(DASH_COLOR, i*5,snake->RandomSeed);
     }
 }
@@ -87,6 +86,8 @@ void RegularColor(Snake* snake)
     }
 }
 
+//global function to set the color of a snake
+//It's called at each frame for each snake. That's slightly unefficient but it really simplify the code
 int UpdateColor(Snake * snake)
 {
     if (snake->Dead)

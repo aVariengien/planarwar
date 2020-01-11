@@ -10,6 +10,9 @@ void UpdateDummySnake(Snake * dummy, int w, int h);
 bool UpdateTutorial(Game* tuto, Fruits *fruits, Background *b);
 void DrawTutorial(Game* tuto, Fruits *fruits, Background *b);
 
+
+//All the text to print during tutorial is here
+
 static const char TUTO_TEXT[8][1000] = {"You are a planarian flatworm confined into an aquarium by scientists.\n\
 They are doing research on your epic regeneration abilities during fight. \n\
 You will soon know what I mean by that. But for now, discover how you move\n\

@@ -9,8 +9,9 @@
 #include <math.h>
 #include <time.h>
 
+//Snake type is define in Parameters.h
 
-void InitDemoScreen(Game* demoScreen , int w, int h)
+void InitDemoScreen(Game* demoScreen , int w, int h) //background on the opening screen
 {
     Player demo;
     InitPlayer(&demo,0,w , h, true, demoScreen->GameMode);
@@ -33,7 +34,7 @@ void UpdateDemoScreen(Game* demoScreen, int w, int h)
     UpdateSnakes(demoScreen);
     for (int i=0; i<MAX_SNAKE; i++)
     {
-        UpdateDummySnake(&demoScreen->Players[0].ControledSnake[i],w,h);
+        UpdateDummySnake(&demoScreen->Players[0].ControledSnake[i],w,h); //the have nice bounce on the border of the screen
     }
 }
 
@@ -119,24 +120,25 @@ int UpdatePlayer(Player* player, Mode mode) //Fonction qui met à jour les positi
     for (int i = 0; i<player->SnakeNumber; i++) //On update tous les snakes controlés par le joueur
     {
 
-        snake = &((player->ControledSnake)[i]);
+        snake = &((player->ControledSnake)[i]); //to shorten variables name
         UpdateColor(snake);
 
-        if (snake->MaxLength <=0)
+        if (snake->MaxLength <=0) //if we run out of length on dash
         {
             snake->Dead = 1;
         }
 
-        if (snake->Dead == 0)
+        if (snake->Dead == 0) //if we're not dead
         {
             if (snake->FramesInHurt >0)
             {
                 snake->FramesInHurt --;
             }
-
+                //We update the body position just for a fraction of time REGLAR_SPEED/DASH_SPEED
+                //This allow us to keep a constant length between dash and non dash time.
+                //when the snake is not in dash, we update the local framecount of the snake.
             if ( ((snake->InDash == 0) && ( ((float) snake->UpdatedFrameCount) / ((float) snake->FrameCount) < ((float)REGULAR_SPEED)/((float)DASH_SPEED) )) || snake->InDash)
             {
-
 
                 if (snake->InDash == 0)
                 {
@@ -173,13 +175,11 @@ int UpdatePlayer(Player* player, Mode mode) //Fonction qui met à jour les positi
             }
             if (snake->InDash == 0)
             {
-                snake->FrameCount ++; //when the snake is not in dash, we update the local framecount of the snake.
-                //We update the body position just for a fraction of time REGLAR_SPEED/DASH_SPEED
-                //This allow us to keep a constant length between dash and non dash time.
-            }
-            //printf("%d %d %f\n",snake->UpdatedFrameCount, snake->FrameCount, ((float) snake->UpdatedFrameCount) / ((float) snake->FrameCount));
+                snake->FrameCount ++; //we update the local framecount
 
-            if (IsKeyDown(player->KeyLeft))
+            }
+
+            if (IsKeyDown(player->KeyLeft)) //get input from the player : the same for all snakes controlled
             {
                 snake->Direction -= snake->RotSpeed;
             }
@@ -193,20 +193,22 @@ int UpdatePlayer(Player* player, Mode mode) //Fonction qui met à jour les positi
                 snake->InDash = 1;
 
             }
-            if (snake->InDash)
-            {
-                snake->Speed = DASH_SPEED;
-                snake->RotSpeed = DASH_ROT_SPEED;
-            }
-
             if (IsKeyReleased(player->KeyDash))
             {
                 snake->InDash = 0;
                 snake->Speed = REGULAR_SPEED;
                 snake->RotSpeed = REGULAR_ROT_SPEED;
             }
+            if (snake->InDash)
+            {
+                snake->Speed = DASH_SPEED;
+                snake->RotSpeed = DASH_ROT_SPEED;
+            }
 
-            if (snake->InDash && !snake->Dummy) //to show the effect of collision on a dshing snake, dummy snake are dashing without loss of length
+
+
+            if (snake->InDash && !snake->Dummy)
+                //to show the effect of collision on a dashing snake, dummy snake are dashing without loss of length during tutorial
             {
                 if (rand()%LENGTH_LOSS_SPEED == 0)
                 {
@@ -217,8 +219,8 @@ int UpdatePlayer(Player* player, Mode mode) //Fonction qui met à jour les positi
 
             snake->Position.x += (snake->Speed)*cos(snake->Direction);
             snake->Position.y += (snake->Speed)*sin(snake->Direction);
-            ///MODE COURSE TEST
-            if (mode == COURSE) //Snakes drift to the left if this is  course
+            ///MODE RACE
+            if (mode == COURSE) //Snakes drift to the left if this is in race
             {
                 snake->Position.x -= REGULAR_SPEED;
                 for (int i =0; i<snake->Length; i++)
@@ -227,7 +229,7 @@ int UpdatePlayer(Player* player, Mode mode) //Fonction qui met à jour les positi
                 }
             }
 
-            ///END MODE COURSE TEST
+            ///END MODE RACE
         }
         else
         {
@@ -239,7 +241,7 @@ int UpdatePlayer(Player* player, Mode mode) //Fonction qui met à jour les positi
     return 0;
 }
 
-int DrawSnake(Snake* snake)
+int DrawSnake(Snake* snake) //a snake is just a succession of circles
 {
     for (int i =0; i<snake->Length; i++)
     {
@@ -277,8 +279,7 @@ int CollisionSnakes(Snake snake1,Snake snake2)
     return contact; //if no collision : contact = 0, else, contact is the position of the collision
 }
 
-///TODO : minimum length to create a living snake
-///Debug
+
 
 Snake CreateNewSnake(Snake snake)
 {
@@ -293,7 +294,7 @@ Snake CreateNewSnake(Snake snake)
     newSnake.InDash = snake.InDash;
     newSnake.Length = 0;
     newSnake.MaxLength = 0;
-    //newSnake.Position;
+    //newSnake.Position not set : set during check for cut
     newSnake.RandomSeed = snake.RandomSeed;
     newSnake.RotSpeed = snake.RotSpeed;
     newSnake.Speed = snake.Speed;
@@ -306,7 +307,7 @@ Snake CreateNewSnake(Snake snake)
 
 
 int CheckForCuts(Snake snake, Player* player, int snakeIndex) //If there is a hurt, we check for a (or several) cut in the snake
-//Each living connexe part become a new snake alive. The dead parts became dead leftover
+//Each living connected part become a new snake alive. The dead parts became dead leftover
 {
     Snake newSnake = CreateNewSnake(snake); //A copy of snake but Dead, Position, Length and MaxLength still must be assigned
     newSnake.Position = snake.Position;
@@ -322,10 +323,11 @@ int CheckForCuts(Snake snake, Player* player, int snakeIndex) //If there is a hu
 
     int newSnakeBegining = 0;
 
-    for (int i=0; i<snake.Length; i++)
+    for (int i=0; i<snake.Length; i++) //we go trough the body of the snake to check where/if there is cuts
     {
 
-        if (InLeftOver && (snake.Body[i].Radius > 0) ) //when we were in a dead zone and we see new alive parts : we create the dead snake of the dead part
+        if (InLeftOver && (snake.Body[i].Radius > 0) )
+            //when we were in a dead zone and we see new alive parts : we create the dead snake of the dead part
         {
             InLeftOver = false;
             newSnake.Length = i - newSnakeBegining;
@@ -366,9 +368,9 @@ int CheckForCuts(Snake snake, Player* player, int snakeIndex) //If there is a hu
 
         if (InLeftOver)
         {
-            newSnake.Body[i-newSnakeBegining].Radius = MINIMUM_LEFTOVER_RADIUS; //we reset the width of the snake before the hurt
+            newSnake.Body[i-newSnakeBegining].Radius = MINIMUM_LEFTOVER_RADIUS; //we define a minimum width for dead parts
         }
-        //printf("i : %d LeftO : %d\n",i,InLeftOver );
+
     }
 
     newSnake.Length = snake.Length - newSnakeBegining;
@@ -377,21 +379,21 @@ int CheckForCuts(Snake snake, Player* player, int snakeIndex) //If there is a hu
     if (player->SnakeNumber < MAX_SNAKE)
     {
         player->ControledSnake[player->SnakeNumber-1] = newSnake;
-        //player->SnakeNumber ++;
+        //player->SnakeNumber ++; not used here : that's always the last snake to be added
     }
     return 0;
 }
 
 
 
-int SnakeHurt(Snake * snake, Player * player, int snakeIndex)
+int SnakeHurt(Snake * snake, Player * player, int snakeIndex) //when all the body is hurt
 {
     for (int i = 0; i<snake->Length; i++)
     {
         snake->Body[i].Radius -= HURT_WIDTH_REDUCTION;
     }
-    snake->Width -= HURT_WIDTH_REDUCTION;
-    if (snake->Width <=0)
+    snake->Width -= HURT_WIDTH_REDUCTION; //the head's width is also reduced
+    if (snake->Width <=0) //if the snake is not dead
     {
         snake->Width += HURT_WIDTH_REDUCTION;
     }
@@ -402,6 +404,7 @@ int SnakeHurt(Snake * snake, Player * player, int snakeIndex)
 
 int SnakeLocallyHurt(Snake * snake, Player * player,int snakeIndex, int place)
 {
+    //StayInBound : useful to avoid overflow
     for (int i=StayInBound(place-IMPACT_WIDTH,0,snake->Length-1); i <= StayInBound(place+IMPACT_WIDTH,0,snake->Length-1); i++)
     {
         snake->Body[i].Radius -= IMPACT_WIDTH_REDUCTION;
@@ -413,6 +416,7 @@ int SnakeLocallyHurt(Snake * snake, Player * player,int snakeIndex, int place)
 
 int CollisionAllSnakes(Game* game)
 {
+    //mecanics of collision between all snakes
     int col = 0;
     for (int j =0; j<game->PlayerCount; j++)
     {
@@ -482,7 +486,7 @@ int UpdateSnakes(Game* game)
 
 int CollisionScreen(Vector2 Position,int w,int h)
 {
-    if ((0 > Position.x) ||(Position.x  > w))
+    if ((0 > Position.x) ||(Position.x  > w)) //to know where the collision happend to program the bounces of dummy snakes
     {
         return 1;
     }
@@ -515,7 +519,7 @@ int PlayersAlive(Game* game) //return -1 if there is more than one player alive;
 {
     bool playerAlreadySeen = false;
     int CountAlive = 0;
-    int alivePlayer = -2;
+    int alivePlayer = -2; //if there is a draw
     for (int j =0; j<game->PlayerCount; j++)
     {
         playerAlreadySeen  = false;

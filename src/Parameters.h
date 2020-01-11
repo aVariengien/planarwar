@@ -67,8 +67,12 @@ static const Color HEAD_COLORS[] = {PINK, BLUE, DARKGREEN, PURPLE};
 #define IMPACT_WIDTH_REDUCTION 20 //width reduction when a snake dashes in somebody
 #define COLOR_FLASHING_SPEED 20
 
+//the list of all keys possible to get keys
 static const int keys[] = {39,44,45,46,47,48,49,50,51,52,53,54,55,56,57,59,61,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,32,256,257,258,259,260,261,262,263,264,265,266,267,268,269,280,281,282,283,284,290,291,292,293,294,295,296,297,298,299,300,301,340,341,342,343,344,345,346,347,348,91,92,93,96,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,
 336};
+
+/*BodyPart, Snake, Player and Game type are defined here. They could not be defined in Snake.h because Color.c uses
+the type Snake but Snake.c uses function from Color.c*/
 
 struct BodyPart
 {
@@ -103,11 +107,11 @@ struct Snake
 
 typedef struct Snake Snake;
 
-struct Player //Un joueur peut controler plusieurs snakes
+struct Player //A player can control several snakes
 {
     Snake ControledSnake[MAX_SNAKE];
     Color BodyColor;
-    Color HeadColor; //Tous les snakes controlés ont la même couleur : la couleur du joueur
+    Color HeadColor; //all the snakes controled by a player have the same color : the player's color
     int SnakeNumber;
     int KeyRight;
     int KeyLeft;

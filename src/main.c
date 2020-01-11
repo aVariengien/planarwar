@@ -2,14 +2,14 @@
 /*******************************************************************************************
 *
 *
-*   PlanarWar
-*   Fight for your life against other genetically modified planarian worms in a Petri box !
+*   PlanarWar !
+*   Fight for your life against other genetically modified planarian worms !
 *   You can cut a worm in pieces by crashing on it but be careful : the pieces become new living worms !
 *
 *   This game has been created by Alexandre Variengien using raylib (www.raylib.com)
+*
 *   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
 *
-*   Copyright (c) 2014-2019 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
@@ -33,14 +33,15 @@
 
 
 
-bool delay(int frames, int FramesCounter, bool reset) //fonction de delay à usage unique basée sur le nombre de frames
+bool delay(int frames, int FramesCounter, bool reset)
+//fonction de delay à usage unique basée sur le nombre de frames
 {
     static bool FirstCall = true;
     static int InitialFC = 0;
 
     if (reset)
     {
-        FirstCall = true;
+        FirstCall = true; //to reset the delay
         return true;
     }
     else
@@ -50,7 +51,6 @@ bool delay(int frames, int FramesCounter, bool reset) //fonction de delay à usag
             FirstCall = false;
             InitialFC = FramesCounter;
         }
-
         if (FramesCounter - InitialFC > frames)
         {
             return true;
@@ -64,7 +64,8 @@ bool delay(int frames, int FramesCounter, bool reset) //fonction de delay à usag
 }
 
 
-int GetKeyboardKeyDown()
+int GetKeyboardKeyDown() //a practical way to get the exact key for player control
+//if we use "GetKeyPressed" we get an ASCII code of the letter down
 {
     for (int i=0; i<105; i++)
     {
@@ -76,13 +77,11 @@ int GetKeyboardKeyDown()
     return -1;
 }
 
+//type for GameScreen
 
-//----------------------------------------------------------------------------------
-// Types and Structures Definition
-//----------------------------------------------------------------------------------
 typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING, RULES, GAME_PARAM,TUTORIAL } GameScreen;
 
-///nb de joueurs -> keys -> game
+
 
 
 //----------------------------------------------------------------------------------
@@ -91,7 +90,7 @@ typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING, RULES, GAME_PARAM,T
 int main(void)
 
 {
-    // Initialization (Note windowTitle is unused on Android)
+    // Initialization
     //--------------------------------------------------------------------------------------
     int screenWidth = 1920/2;
     int screenHeight = 1080/2;
@@ -100,12 +99,12 @@ int main(void)
 
     if (GetMonitorCount() > 0)
     {
-        screenHeight = GetMonitorHeight(0);
+        screenHeight = GetMonitorHeight(0); //we open and close a first window just to get the dimension of the screen
         screenWidth = GetMonitorWidth(0);
     }
     else
     {
-        printf("\n ERROR : No Monitor recognised\n");
+        printf("\n ERROR : No Monitor recognised\n"); //if there is no monitor
         exit(-1);
     }
     CloseWindow();
@@ -115,14 +114,14 @@ int main(void)
     ToggleFullscreen();
 
     GameScreen currentScreen = LOGO;
-    printf("ok");
-    // TODO: Initialize all required variables and load all required data here!
 
-    srand(time(NULL));
+    srand(time(NULL)); //init of the rand seed with time
     int framesCounter = 0;          // Useful to count frames
 
     SetTargetFPS(60);               // Set desired framerate (frames-per-second)
-    //--------------------------------------------------------------------------------------
+    //--------------------------------------------------------
+    //                  Initialization
+    //--------------------------------------------------------
     Game game;
     game.GameMode = NORMAL;
     Player CurrentPlayer;
@@ -130,11 +129,8 @@ int main(void)
     Game DemoScreen;
     InitDemoScreen(&DemoScreen, screenWidth, screenHeight);
 
-
     Fruits fruits;
     fruits.FruitCount = 0;
-
-
 
     Background b;
     InitBackgroung(&b,screenWidth,screenHeight);
@@ -143,31 +139,28 @@ int main(void)
 
     Fruits tutoFruits;
 
-
     Game tuto;
     Player playerTuto;
-    tuto.PlayerCount = 3; //the player and a dummy snake to test attacks
+    tuto.PlayerCount = 3; //the player, a dummy snake to test attacks and a snake bound to death to test dead bodies
     tuto.GameMode = NORMAL;
     InitPlayer(&playerTuto,0,screenWidth,screenHeight,true,NORMAL);
-    playerTuto.KeyLeft = KEY_LEFT;
+    playerTuto.KeyLeft = KEY_LEFT; //keys are fixed for tutorial
     playerTuto.KeyRight = KEY_RIGHT;
     playerTuto.KeyDash = KEY_UP;
     tuto.Players[0] = playerTuto;
 
     InitPlayer(&playerTuto,1,screenWidth,screenHeight,true,NORMAL); //a dummy player
-    playerTuto.KeyLeft = KEY_ONE; //random key not to be used
+    playerTuto.KeyLeft = KEY_ONE; //random key not though to be used
     playerTuto.KeyRight = KEY_ONE;
     playerTuto.KeyDash = KEY_ONE;
     playerTuto.ControledSnake[0].Dummy = true;
     tuto.Players[1] = playerTuto;
 
-
     InitPlayer(&playerTuto,2,screenWidth,screenHeight,true,NORMAL); //a dead player
-    playerTuto.KeyLeft = KEY_ONE; //random key not to be used
+    playerTuto.KeyLeft = KEY_ONE; //random key not thought to be used
     playerTuto.KeyRight = KEY_ONE;
     playerTuto.KeyDash = KEY_ONE;
     tuto.Players[2] = playerTuto;
-
 
     //Control variables
     bool BeginGame = false;
@@ -182,31 +175,30 @@ int main(void)
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         framesCounter++;    // Count frames
+        //----------------------------------------------------------------------------------
         // Update
         //----------------------------------------------------------------------------------
         switch(currentScreen)
         {
             case LOGO:
             {
-                // TODO: Update LOGO screen variables here!
-                // Wait for 2 seconds (120 frames) before jumping to TITLE screen
-                if (framesCounter > 1)
-                {
+
+                //LOGO screen is use as a proper way to init the TITLE SCREEN, drawn only for one frame
+
+                if (framesCounter > 1)   {
                     currentScreen = TITLE;
                     InitDemoScreen(&DemoScreen, screenWidth, screenHeight);
-
                 }
             } break;
+
             case TITLE:
             {
                 UpdateDemoScreen(&DemoScreen,screenWidth,screenHeight);
-
                 if (IsKeyPressed(KEY_ENTER) )
                 {
                     currentScreen = GAME_PARAM;
                 }
-
-                if (IsKeyPressed(KEY_T))
+                if (IsKeyPressed(KEY_T)) //initialization of tutorial
                 {
                     InitPlayer(&tuto.Players[0],0,b.Width,b.Height,false,tuto.GameMode); //initialiation of tutorial variables
                     InitPlayer(&tuto.Players[1],1,b.Width,b.Height,false,tuto.GameMode);
@@ -223,7 +215,7 @@ int main(void)
                     }
                 } break;
 
-            case GAME_PARAM:
+            case GAME_PARAM: // Player Count -> Game mode -> players' keys -> game
             {
                 if (StepGetParam == 0)
                 {
@@ -233,7 +225,7 @@ int main(void)
                     case KEY_TWO: game.PlayerCount = 2;  break;
                     case KEY_THREE: game.PlayerCount = 3; break;
                     case KEY_FOUR: game.PlayerCount = 4; break;
-                    default: StepGetParam = 0; /*printf("%d \n", GetKeyPressed());*/ break;
+                    default: StepGetParam = 0; break;
                     }
                 }
 
@@ -248,14 +240,14 @@ int main(void)
                     }
                 }
 
-
+                //we use 30 frames of delay here in order to let the time to release the key used for Game Mode
                 if ((StepGetParam >= 2) && delay(30,framesCounter, false) && !BeginGame)
                 {
 
-                    int k = GetKeyboardKeyDown();
+                    int k = GetKeyboardKeyDown(); //k=-1 if no key is pressed
                     if ((k != -1) && !BeginGame)
                     {
-                        switch (NumKey)
+                        switch (NumKey) //the key we are prompting
                         {
                             case 0: CurrentPlayer.KeyLeft = k; NumKey ++; break;
                             case 1: CurrentPlayer.KeyRight = k; NumKey ++; break;
@@ -281,7 +273,7 @@ int main(void)
 
                 }
 
-                if (BeginGame && IsKeyPressed(KEY_ENTER) )
+                if (BeginGame && IsKeyPressed(KEY_ENTER) ) //initialization of the gameplay
                 {
                     InitBackgroung(&b,screenWidth,screenHeight);
                     currentScreen = GAMEPLAY;
@@ -295,14 +287,14 @@ int main(void)
                     UpdateBackground(&b, screenWidth,screenHeight);
                 }
 
-                if (playerAlive == -1)
+                if (playerAlive == -1) //the game is running
                 {
                     CollisionAllSnakes(&game);
                     CollisionAllSnakeScreen(&game,screenWidth,screenHeight);
                     UpdateSnakes(&game);
                     UpdateFruits(&game,&fruits,screenHeight,screenWidth);
                 }
-                else
+                else //end of the game less than 1 player left
                 {
                     EndGame = true;
                     if (playerAlive != -2)
@@ -316,7 +308,7 @@ int main(void)
                 }
 
 
-                if (EndGame && IsKeyPressed(KEY_ENTER))
+                if (EndGame && IsKeyPressed(KEY_ENTER)) //rematch
                 {
                     currentScreen = GAMEPLAY;
                     BeginGame = true;
@@ -329,7 +321,7 @@ int main(void)
 
                 }
 
-                if (EndGame && (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressed(KEY_R) ))
+                if (EndGame && (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressed(KEY_R) )) //back to the title screen
                 {
                     currentScreen = LOGO;
                     delay(0,0,true);
@@ -348,7 +340,6 @@ int main(void)
         }
 
         //----------------------------------------------------------------------------------
-
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -390,7 +381,6 @@ int main(void)
                         DrawText("Press N for NORMAL Mode, R for RACE Mode", screenWidth/9, screenHeight/2, 60, WHITE);
                     }
 
-
                     if (StepGetParam == 2)
                     {
                         char InfoPlayers[60];
@@ -429,8 +419,8 @@ int main(void)
                 {
 
                     DrawBackground(&b);
-                    DrawFPS(0,0);
-                    if (playerAlive == -1)
+                    DrawFPS(0,0); //to get discrete feedback on how when the game is running
+                    if (playerAlive == -1) //if the game is running
                     {
                         DrawAllSnakes(&game);
                         DrawFruits(&fruits);
@@ -461,13 +451,13 @@ int main(void)
             }
 
         EndDrawing();
-        //----------------------------------------------------------------------------------
-    }
 
+    }
+    //----------------------------------------------------------------------------------
     // De-Initialization
     //--------------------------------------------------------------------------------------
 
-    // TODO: Unload all loaded data (textures, fonts, audio) here!
+    // Nothing to unload : no dynamic memory needed here
 
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

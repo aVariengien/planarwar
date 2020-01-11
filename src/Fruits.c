@@ -15,7 +15,7 @@ void SwitchFruit(Fruits * fruits, int x, int y)
 }
 
 
-int UpdateEatenFruits(Game* game, Fruits* fruits)
+int UpdateEatenFruits(Game* game, Fruits* fruits) //To make snakes eat fruits
 {
 
     for (int j =0; j<game->PlayerCount; j++)
@@ -74,7 +74,7 @@ Fruit NewFruit(int h, int w)
     return f;
 }
 
-bool IsCircleOnScreen(Vector2 pos, float rad, int h, int w)
+bool IsCircleOnScreen(Vector2 pos, float rad, int h, int w) //Only for race
 {
     return ((pos.x + rad) > 0);
 }
@@ -97,7 +97,7 @@ int UpdateFruits(Game* game, Fruits* fruits, int h, int w)
             fruits->Fruits[i].Radius += FRUIS_GROWTH_SPEED;
         }
     }
-    ///MODE COURSE
+    ///MODE RACE
     if (game->GameMode == COURSE)
     {
         for (int i=0; i<fruits->FruitCount; i++)
@@ -121,7 +121,7 @@ void DrawFruits(Fruits * fruits)
     {
         if (!fruits->Fruits[i].Eaten)
         {
-            if (fruits->Fruits[i].SuperFruit)
+            if (fruits->Fruits[i].SuperFruit) //different color if superfruit or not
             {
 
                 DrawCircleV(fruits->Fruits[i].Position,fruits->Fruits[i].Radius,SUPER_FRUIT_OUT_COLOR);
