@@ -1,5 +1,6 @@
 -----------------
-# PlanarWar by Alexandre Variengien 
+# PlanarWar 
+by Alexandre Variengien 
 -----------------
 
 ### Description :
