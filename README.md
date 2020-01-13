@@ -1,14 +1,14 @@
 -----------------
-#PlanarWar by Alexandre Variengien 
+# PlanarWar by Alexandre Variengien 
 -----------------
 
-###Description :
+### Description :
 
 Play a planarian worm and cut your enemies to survive !
 
 
 
-###Build and Install instruction :
+### Build and Install instruction :
 
 This project was developed with the videogames programming library Raylib (www.raylib.com).
 It can be compiled with make and gcc under Linux or Windows (with mingw32-make for example).
