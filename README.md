@@ -8,8 +8,7 @@
 ## Description :
 
 Play a planarian worm and cut your enemies to survive !
-
-
+You can test is now on your navigator [here](http://perso.ens-lyon.fr/alexandre.variengien/PlanarWar.html) !
 
 ## Build and Install instruction :
 
@@ -22,7 +21,7 @@ as the executable).
 
 There is also a Code::Blocks project included that uses Release and Debug directories in /bin and /obj.
 
-The game is also available online at perso.ens-lyon/alexandre.variengien/. 
+The game is also available online at [http://perso.ens-lyon.fr/alexandre.variengien/PlanarWar.html](http://perso.ens-lyon.fr/alexandre.variengien/PlanarWar.html). 
 This web version was compiled into WebAssembly with Emscripten and Raylib for web.
 
 Enjoy !
